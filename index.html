@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Image Upload Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .preview {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            display: none;
+        }
+        .progress-bar {
+            width: 0;
+            height: 5px;
+            background-color: #28a745;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <h2>Upload Your Image</h2>
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        
+        <label for="anyfile">Select Image:</label>
+        <input type="file" name="anyfile" id="anyfile" accept="image/*" required>
+
+        <!-- Image preview area -->
+        <div class="preview">
+            <p>Image Preview:</p>
+            <img id="imagePreview" alt="Image Preview">
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-bar" id="progressBar"></div>
+
+        <input type="submit" value="Upload Image" name="submit">
+    </form>
+
+    <script>
+        // Image preview functionality
+        const fileInput = document.getElementById('anyfile');
+        const imagePreview = document.getElementById('imagePreview');
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                imagePreview.style.display = "block";
+                reader.addEventListener("load", function() {
+                    imagePreview.setAttribute("src", this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Progress bar simulation (example)
+        const form = document.querySelector('form');
+        const progressBar = document.getElementById('progressBar');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Remove this to allow actual form submission
+            progressBar.style.width = '0%';
+
+            const interval = setInterval(() => {
+                let width = parseInt(progressBar.style.width);
+                if (width >= 100) {
+                    clearInterval(interval);
+                    alert('Upload complete!');
+                } else {
+                    width += 10;
+                    progressBar.style.width = width + '%';
+                }
+            }, 200);
+        });
+    </script>
+
+</body>
+</html>
